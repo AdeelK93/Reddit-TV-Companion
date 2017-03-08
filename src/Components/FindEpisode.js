@@ -5,13 +5,23 @@ import SeasonDropdown from './SeasonDropdown.js';
 import EpisodeTable from './EpisodeTable.js';
 
 class FindEpisode extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      show: '',
-      season: 1, seasons: null,
-      episode: 1, episodes: []
+      show: this.props.show,
+      season: this.props.season, seasons: null,
+      episode: this.props.episode, episodes: []
     };
+    // Query IMDB if necessary
+    if (this.props.show!=='') {
+      imdb.get(this.props.show)
+      .then(media => {
+        media.episodes()
+        .then(tv => this.setState({
+          episodes: tv, seasons: tv[tv.length-1].season
+        }))
+      });
+    }
   }
 
   handleSearch = (event,search) => {
@@ -24,8 +34,7 @@ class FindEpisode extends React.Component {
           show: media.title,
           episodes: tv,
           seasons: tv[tv.length-1].season
-        })
-      )
+        }))
       } else {
         this.setState({show: null,seasons: null})
       }
@@ -36,7 +45,11 @@ class FindEpisode extends React.Component {
   onEpisodeChanged = episode => {
     // Show only the episodes in the current season
     const filtered = this.state.episodes.filter(episode => episode.season===this.state.season)
-    console.log(filtered[episode]);
+    this.props.callback(
+      this.state.show,
+      this.state.season, episode,
+      filtered[episode].released, filtered[episode].imdbid
+    )
     this.setState({episode})
   }
 
@@ -46,7 +59,7 @@ class FindEpisode extends React.Component {
         <div className='center'>
           <TextField floatingLabelText={this.state.show || 'TV Show Name'}
             errorText={this.state.show===null ? 'Need a valid show name' : null}
-            onChange={this.handleSearch}
+            defaultValue={this.props.show} onChange={this.handleSearch}
           />
           <SeasonDropdown seasons={this.state.seasons}
             value={this.state.season} handleSeason={this.onSeasonChanged}

@@ -6,17 +6,19 @@ const EpisodeTable = props => {
   const filtered = props.episodes.filter(episode => episode.season===props.season)
 
   return(
-    <Table onRowSelection={props.handleEpisode}>
+    <Table onRowSelection={row => props.handleEpisode(row[0] || 0)}>
       <TableHeader displaySelectAll={false}>
         <TableRow>
-          {['Episode #','Name','Rating'].map(column => <TableHeaderColumn key={column}> {column} </TableHeaderColumn>)}
+          <TableHeaderColumn> Episode </TableHeaderColumn>
+          <TableHeaderColumn style={{width: '50%'}}> Name </TableHeaderColumn>
+          <TableHeaderColumn> Rating </TableHeaderColumn>
         </TableRow>
       </TableHeader>
       <TableBody deselectOnClickaway={false}>
         {filtered.map((row, i) => (
-              <TableRow key={i} selected={i===props.episode}>
+              <TableRow selected={i===props.episode} hoverable={true} key={i}>
                 <TableRowColumn>{row.episode}</TableRowColumn>
-                <TableRowColumn>{row.name}</TableRowColumn>
+                <TableRowColumn style={{width: '50%'}}>{row.name}</TableRowColumn>
                 <TableRowColumn>{row.rating}</TableRowColumn>
               </TableRow>
               ))}

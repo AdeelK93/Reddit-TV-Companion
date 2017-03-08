@@ -8,6 +8,8 @@ body {
   text-align: center;
 }
 
-.top17 {
-  top: 17px;
+@media screen and (min-width: 650px) {
+  .top17 {
+    top: 17px;
+  }
 }
