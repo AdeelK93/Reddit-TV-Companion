@@ -5,11 +5,10 @@
   "private": true,
   "dependencies": {
     "imdb-api": "^2.2.1",
-    "material-ui": "^0.17.0",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "react-router-component": "^0.36.5",
-    "react-tap-event-plugin": "^2.0.1"
+    "semantic-ui-react": "^0.67.0"
   },
   "devDependencies": {
     "react-scripts": "0.9.4"

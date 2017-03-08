@@ -1,29 +1,40 @@
 import React from 'react';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import { Accordion, Button, Icon } from 'semantic-ui-react'
+
+const EpisodeContent = (episode, show) => {
+  // Release date in Unix seconds
+  const airDate = Math.floor(episode.released.getTime() / 1000)
+  const oneWeek = airDate + 604800
+  return(
+    <div>
+      <Button color='google plus' href={'https://www.reddit.com/search?sort=top&q=(and%20text:%27'+show+'%27%20timestamp:'+airDate+'..'+oneWeek+')&syntax=cloudsearch'} target='_blank'>
+        <Icon name='reddit alien' /> Reddit
+      </Button>
+      <Button color='yellow' href={'http://www.imdb.com/title/' + episode.imdbid} target='_blank'>
+        <Icon name='imdb' /> IMDB
+      </Button>
+      <br/>
+      Rating: {episode.rating}/10
+    </div>
+)
+}
 
 const EpisodeTable = props => {
+  if (props.episodes.length===0 || props.show===null) {
+    return null // No episode data, don't show descriptions
+  }
   // Show only the episodes in the current season
   const filtered = props.episodes.filter(episode => episode.season===props.season)
 
+  // The panels that contain information and links about the episodes
+  const panels = filtered.map(row => {
+    return {title: row.episode + ': ' + row.name, content: EpisodeContent(row, props.show)}
+  })
+
   return(
-    <Table onRowSelection={row => props.handleEpisode(row[0] || 0)}>
-      <TableHeader displaySelectAll={false}>
-        <TableRow>
-          <TableHeaderColumn> Episode </TableHeaderColumn>
-          <TableHeaderColumn style={{width: '50%'}}> Name </TableHeaderColumn>
-          <TableHeaderColumn> Rating </TableHeaderColumn>
-        </TableRow>
-      </TableHeader>
-      <TableBody deselectOnClickaway={false}>
-        {filtered.map((row, i) => (
-              <TableRow selected={i===props.episode} hoverable={true} key={i}>
-                <TableRowColumn>{row.episode}</TableRowColumn>
-                <TableRowColumn style={{width: '50%'}}>{row.name}</TableRowColumn>
-                <TableRowColumn>{row.rating}</TableRowColumn>
-              </TableRow>
-              ))}
-      </TableBody>
-    </Table>
+    <Accordion panels={panels} fluid styled
+      onTitleClick={props.handleEpisode}
+    />
   )
 }
 

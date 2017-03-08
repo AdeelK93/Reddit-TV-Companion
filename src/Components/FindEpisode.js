@@ -1,5 +1,5 @@
 import React from 'react';
-import TextField from 'material-ui/TextField';
+import { Header, Grid, Input } from 'semantic-ui-react'
 import imdb from 'imdb-api';
 import SeasonDropdown from './SeasonDropdown.js';
 import EpisodeTable from './EpisodeTable.js';
@@ -25,7 +25,7 @@ class FindEpisode extends React.Component {
   }
 
   handleSearch = (event,search) => {
-    imdb.get(search)
+    imdb.get(search.value)
     .catch(err => err) // don't do anything with invalid searches
     .then(media => {
       if (media.type==='series') {
@@ -41,34 +41,39 @@ class FindEpisode extends React.Component {
     });
   };
 
-  onSeasonChanged = (event,i,season) => this.setState({season})
-  onEpisodeChanged = episode => {
-    // Show only the episodes in the current season
-    const filtered = this.state.episodes.filter(episode => episode.season===this.state.season)
+  onSeasonChanged = (event,season) => this.setState({season: season.value})
+  onEpisodeChanged = (event,episode) => {
     this.props.callback(
       this.state.show,
-      this.state.season, episode,
-      filtered[episode].released, filtered[episode].imdbid
+      this.state.season, episode
     )
     this.setState({episode})
   }
 
   render() {
     return (
-      <div>
-        <div className='center'>
-          <TextField floatingLabelText={this.state.show || 'TV Show Name'}
-            errorText={this.state.show===null ? 'Need a valid show name' : null}
-            defaultValue={this.props.show} onChange={this.handleSearch}
+      <Grid centered container stackable divided='vertically'>
+        <br/>
+        <Header as='h1'>{this.state.show || 'Search for a TV Show'}</Header>
+        <Grid.Row centered columns={2}>
+          <Grid.Column>
+            <Input fluid focus icon='search' error={this.state.show===null}
+              defaultValue={this.props.show} onChange={this.handleSearch}
+            />
+          </Grid.Column>
+          <Grid.Column>
+            <SeasonDropdown seasons={this.state.seasons}
+              value={this.state.season} handleSeason={this.onSeasonChanged}
+            />
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row centered>
+          <EpisodeTable season={this.state.season} episodes={this.state.episodes}
+            show={this.state.show} handleEpisode={this.onEpisodeChanged}
           />
-          <SeasonDropdown seasons={this.state.seasons}
-            value={this.state.season} handleSeason={this.onSeasonChanged}
-          />
-        </div>
-        <EpisodeTable season={this.state.season} episodes={this.state.episodes}
-          episode={this.state.episode} handleEpisode={this.onEpisodeChanged}
-        />
-      </div>
+        </Grid.Row>
+      </Grid>
     );
   }
 }

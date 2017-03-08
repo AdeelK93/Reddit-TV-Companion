@@ -1,6 +1,5 @@
 import React from 'react';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
+import { Dropdown } from 'semantic-ui-react'
 
 const SeasonDropdown = props => {
   if (props.seasons===null) {
@@ -8,13 +7,13 @@ const SeasonDropdown = props => {
   }
   let dropdowns = []
   for (var i=1; i<=props.seasons; i++) {
-    dropdowns.push(<MenuItem value={i} primaryText={'Season ' + i} key={i} />);
+    dropdowns.push({text: 'Season ' + i, value: i});
   }
 
   return(
-    <DropDownMenu value={props.value} onChange={props.handleSeason} className='top17' >
-      {dropdowns}
-    </DropDownMenu>
+    <Dropdown placeholder='Season' fluid value={props.value}
+      selection scrolling options={dropdowns} onChange={props.handleSeason}
+    />
   )
 }
 
