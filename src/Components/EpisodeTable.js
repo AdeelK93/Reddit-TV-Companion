@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Button, Icon } from 'semantic-ui-react'
+import { Accordion, Button, Icon, Rating } from 'semantic-ui-react'
 
 const EpisodeContent = (episode, show) => {
   // Release date in Unix seconds
@@ -13,8 +13,9 @@ const EpisodeContent = (episode, show) => {
       <Button color='yellow' href={'http://www.imdb.com/title/' + episode.imdbid} target='_blank'>
         <Icon name='imdb' /> IMDB
       </Button>
-      <br/>
+      <br/><br/>
       Rating: {episode.rating}/10
+      <Rating disabled icon='star' defaultRating={episode.rating} maxRating={10} />
     </div>
 )
 }
@@ -33,7 +34,7 @@ const EpisodeTable = props => {
 
   return(
     <Accordion panels={panels} fluid styled
-      onTitleClick={props.handleEpisode}
+      onTitleClick={props.handleEpisode} defaultActiveIndex={props.episode}
     />
   )
 }

@@ -7,9 +7,3 @@ body {
 .center {
   text-align: center;
 }
-
-@media screen and (min-width: 650px) {
-  .top17 {
-    top: 17px;
-  }
-}

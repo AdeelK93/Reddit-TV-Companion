@@ -8,13 +8,14 @@ class FindEpisode extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: this.props.show,
-      season: this.props.season, seasons: null,
-      episode: this.props.episode, episodes: []
+      show: this.props._query.show || '',
+      season: parseFloat(this.props._query.se)|| 1,
+      episode: (this.props._query.ep-1) || 1, // makes index more human-understandable
+      seasons: null, episodes: []
     };
     // Query IMDB if necessary
-    if (this.props.show!=='') {
-      imdb.get(this.props.show)
+    if (this.props._query.show!==undefined) {
+      imdb.get(this.props._query.show)
       .then(media => {
         media.episodes()
         .then(tv => this.setState({
@@ -25,7 +26,7 @@ class FindEpisode extends React.Component {
   }
 
   handleSearch = (event,search) => {
-    imdb.get(search.value)
+    imdb.getReq({name: search.value, type: 'series'})
     .catch(err => err) // don't do anything with invalid searches
     .then(media => {
       if (media.type==='series') {
@@ -43,10 +44,8 @@ class FindEpisode extends React.Component {
 
   onSeasonChanged = (event,season) => this.setState({season: season.value})
   onEpisodeChanged = (event,episode) => {
-    this.props.callback(
-      this.state.show,
-      this.state.season, episode
-    )
+    // Update the route
+    window.location = '#?show=' + this.state.show + '&se=' + this.state.season + '&ep=' + (episode+1)
     this.setState({episode})
   }
 
@@ -58,7 +57,7 @@ class FindEpisode extends React.Component {
         <Grid.Row centered columns={2}>
           <Grid.Column>
             <Input fluid focus icon='search' error={this.state.show===null}
-              defaultValue={this.props.show} onChange={this.handleSearch}
+              defaultValue={this.props._query.show} onChange={this.handleSearch}
             />
           </Grid.Column>
           <Grid.Column>
@@ -69,7 +68,8 @@ class FindEpisode extends React.Component {
         </Grid.Row>
 
         <Grid.Row centered>
-          <EpisodeTable season={this.state.season} episodes={this.state.episodes}
+          <EpisodeTable season={this.state.season}
+            episodes={this.state.episodes} episode={this.state.episode}
             show={this.state.show} handleEpisode={this.onEpisodeChanged}
           />
         </Grid.Row>
