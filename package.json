@@ -1,7 +1,7 @@
 {
   "name": "reddit-tv-companion",
   "author": "Adeel Khan",
-  "homepage": "http://adeelk93.github.io/RedditTVCompanion/",
+  "homepage": "https://adeelk93.github.io/Reddit-TV-Companion/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

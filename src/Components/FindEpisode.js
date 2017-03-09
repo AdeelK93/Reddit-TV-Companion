@@ -10,7 +10,7 @@ class FindEpisode extends React.Component {
     this.state = {
       show: this.props._query.show || '',
       season: parseFloat(this.props._query.se)|| 1,
-      episode: (this.props._query.ep-1) || 1, // makes index more human-understandable
+      episode: (this.props._query.ep-1) || 0, // makes index more human-understandable
       seasons: null, episodes: []
     };
     // Query IMDB if necessary
