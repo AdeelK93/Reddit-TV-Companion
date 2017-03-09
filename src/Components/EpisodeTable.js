@@ -5,9 +5,11 @@ const EpisodeContent = (episode, show) => {
   // Release date in Unix seconds
   const airDate = Math.floor(episode.released.getTime() / 1000)
   const oneWeek = airDate + 604800
+  // The standard reddit mobile doesn't like cloudsearch, so instead use i.reddit.com
+  const redditDomain = window.innerWidth > 700 ? 'www' : 'i'
   return(
     <div>
-      <Button color='google plus' href={'https://www.reddit.com/search?sort=top&q=(and%20text:%27'+show+'%27%20timestamp:'+airDate+'..'+oneWeek+')&syntax=cloudsearch'} target='_blank'>
+      <Button color='google plus' href={'https://'+redditDomain+'.reddit.com/search?sort=top&q=(and%20text:%27'+show+'%27%20timestamp:'+airDate+'..'+oneWeek+')&syntax=cloudsearch'} target='_blank'>
         <Icon name='reddit alien' /> Reddit
       </Button>
       <Button color='yellow' href={'http://www.imdb.com/title/' + episode.imdbid} target='_blank'>
