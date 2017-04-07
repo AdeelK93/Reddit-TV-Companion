@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Grid, Input } from 'semantic-ui-react'
-import imdb from 'imdb-api';
+import * as imdb from 'imdb-api';
 import SeasonDropdown from './SeasonDropdown.js';
 import EpisodeTable from './EpisodeTable.js';
 
