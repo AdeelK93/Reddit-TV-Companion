@@ -1,8 +1,9 @@
 import React from 'react';
 import { Header, Grid, Input } from 'semantic-ui-react'
 import * as imdb from 'imdb-api';
-import SeasonDropdown from './SeasonDropdown.js';
-import EpisodeTable from './EpisodeTable.js';
+import SeasonDropdown from './SeasonDropdown';
+import EpisodeTable from './EpisodeTable';
+import apiKey from '../apiKey';
 
 class FindEpisode extends React.Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class FindEpisode extends React.Component {
     };
     // Query IMDB if necessary
     if (this.props._query.show!==undefined) {
-      imdb.get(this.props._query.show)
+      imdb.get(this.props._query.show, {apiKey})
       .then(media => {
         media.episodes()
         .then(tv => this.setState({
@@ -26,7 +27,7 @@ class FindEpisode extends React.Component {
   }
 
   handleSearch = (event,search) => {
-    imdb.getReq({name: search.value, type: 'series'})
+    imdb.getReq({name: search.value, type: 'series', opts: {apiKey}})
     .catch(err => err) // don't do anything with invalid searches
     .then(media => {
       if (media.type==='series') {

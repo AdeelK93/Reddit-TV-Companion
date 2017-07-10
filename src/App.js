@@ -1,6 +1,6 @@
 import React from 'react';
 import { Location, Locations, NotFound } from 'react-router-component';
-import FindEpisode from './Components/FindEpisode.js';
+import FindEpisode from './Components/FindEpisode';
 import './App.css';
 
 class App extends React.Component {

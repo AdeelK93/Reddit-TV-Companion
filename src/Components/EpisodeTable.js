@@ -9,7 +9,7 @@ const EpisodeContent = (episode, show) => {
   const redditDomain = window.innerWidth > 700 ? 'www' : 'i'
   return(
     <div>
-      <Button color='google plus' href={'https://'+redditDomain+'.reddit.com/search?sort=top&q=(and%20text:%27'+show+'%27%20timestamp:'+airDate+'..'+oneWeek+')&syntax=cloudsearch'} target='_blank'>
+      <Button color='google plus' href={'https://'+redditDomain+'.reddit.com/search?sort=top&q=(and%20title:%27'+show+'%27%20timestamp:'+airDate+'..'+oneWeek+')&syntax=cloudsearch'} target='_blank'>
         <Icon name='reddit alien' /> Reddit
       </Button>
       <Button color='yellow' href={'http://www.imdb.com/title/' + episode.imdbid} target='_blank'>
