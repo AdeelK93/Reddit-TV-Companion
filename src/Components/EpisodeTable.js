@@ -3,7 +3,7 @@ import { Accordion, Button, Icon, Rating } from 'semantic-ui-react'
 
 const EpisodeContent = (episode, show) => {
   // Release date in Unix seconds
-  const airDate = Math.floor(episode.released.getTime() / 1000)
+  const airDate = Math.floor(episode.released / 1000)
   const oneWeek = airDate + 604800
   // The standard reddit mobile doesn't like cloudsearch, so instead use i.reddit.com
   const redditDomain = window.innerWidth > 700 ? 'www' : 'i'
@@ -30,13 +30,15 @@ const EpisodeTable = props => {
   const filtered = props.episodes.filter(episode => episode.season===props.season)
 
   // The panels that contain information and links about the episodes
-  const panels = filtered.map(row => {
-    return {title: row.episode + ': ' + row.name, content: EpisodeContent(row, props.show)}
-  })
+  const panels = filtered.map(row => ({
+    title: row.episode + ': ' + row.name,
+    content: {content: EpisodeContent(row, props.show)},
+    key: row.episode
+  }))
 
   return(
     <Accordion panels={panels} fluid styled
-      onTitleClick={props.handleEpisode} defaultActiveIndex={props.episode}
+      onTitleClick={props.handleEpisode} activeIndex={props.episode.index}
     />
   )
 }

@@ -16,25 +16,27 @@ class FindEpisode extends React.Component {
     };
     // Query IMDB if necessary
     if (this.props._query.show!==undefined) {
-      imdb.get(this.props._query.show, {apiKey})
+      imdb.get({ name: this.props._query.show, type: 'series' }, { apiKey })
       .then(media => {
         media.episodes()
         .then(tv => this.setState({
-          episodes: tv, seasons: tv[tv.length-1].season
+          episodes: tv.filter(episode => episode.name),
+          seasons: tv[tv.length-1].season
         }))
       });
     }
   }
 
   handleSearch = (event,search) => {
-    imdb.getReq({name: search.value, type: 'series', opts: {apiKey}})
+    imdb.get({ name: search.value, type: 'series' }, { apiKey })
     .catch(err => err) // don't do anything with invalid searches
     .then(media => {
       if (media.type==='series') {
         media.episodes()
         .then(tv => this.setState({
           show: media.title,
-          episodes: tv,
+          // The last record in the season is sometimes a dummy record
+          episodes: tv.filter(episode => episode.name),
           seasons: tv[tv.length-1].season
         }))
       } else {
@@ -43,10 +45,10 @@ class FindEpisode extends React.Component {
     });
   };
 
-  onSeasonChanged = (event,season) => this.setState({season: season.value})
-  onEpisodeChanged = (event,episode) => {
+  onSeasonChanged = (event, season) => this.setState({season: season.value})
+  onEpisodeChanged = (event, episode) => {
     // Update the route
-    window.location = '#?show=' + this.state.show + '&se=' + this.state.season + '&ep=' + (episode+1)
+    window.location = '#?show=' + this.state.show + '&se=' + this.state.season + '&ep=' + (episode.index+1)
     this.setState({episode})
   }
 
